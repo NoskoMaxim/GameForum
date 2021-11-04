@@ -1,0 +1,6 @@
+com\GameForum\controller\publication\PublicationController.class
+com\GameForum\dto\publication\CategoryDto.class
+com\GameForum\dto\publication\PublicationDto.class
+com\GameForum\GameForumServiceApplication.class
+com\GameForum\model\publication\PublicationStatus.class
+com\GameForum\dto\publication\TagDto.class

@@ -59,8 +59,6 @@ paths:
       operationId: "updatePublication"
       consumes:
       - "application/json"
-      produces:
-      - "application/json"
       parameters:
       - in: "body"
         name: "body"
@@ -386,6 +384,9 @@ definitions:
       title:
         type: "string"
         example: "MinecraftNews"
+      content:
+        type: "string"
+        example: "MinecraftNews is a cool game"
       photoUrls:
         type: "array"
         xml:
