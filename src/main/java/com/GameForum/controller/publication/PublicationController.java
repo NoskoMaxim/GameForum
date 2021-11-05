@@ -13,10 +13,10 @@ import java.util.stream.Collectors;
 @RequestMapping("/game-forum/publication")
 public class PublicationController {
 
-    private Map<Long, PublicationDto> publications = new HashMap<>();
+    private final Map<Long, PublicationDto> publications = new HashMap<>();
 
     @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity addPublication(@RequestBody PublicationDto publication) {
+    public ResponseEntity<PublicationDto> addPublication(@RequestBody PublicationDto publication) {
         publication.setId((long) publications.size());
         publications.put((long) publications.size(), publication);
         return ResponseEntity.ok(publication);
@@ -28,21 +28,21 @@ public class PublicationController {
         return ResponseEntity.ok().build();
     }
 
-//    @GetMapping(value = "/findByTitle", produces = "application/json") //Дописать
-//    public ResponseEntity findPublicationsByTitle(@PathVariable List<String> findByTitle) {
-//        //publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals());
-//        Map<Long, PublicationDto> pub = findByTitle.forEach(tit -> publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals(tit)).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
-//       return ResponseEntity.ok(pub);
-//    }
+    @GetMapping(value = "/findByTitle", produces = "application/json") //Дописать
+    public ResponseEntity<List<PublicationDto>> findPublicationsByTitle(@RequestParam List<String> findByTitle) {
+        //publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals());
+        //findByTitle.forEach(tit -> publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals(tit)).collect(Collectors.toList()));
+        return (ResponseEntity<List<PublicationDto>>) ResponseEntity.ok(findByTitle.forEach(tit -> publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals(tit)).collect(Collectors.toList())));
+    }
 
     @GetMapping(value = "{publicationId}", produces = "application/json")
-    public ResponseEntity getPublicationById(@PathVariable Long publicationId) {
+    public ResponseEntity<PublicationDto> getPublicationById(@PathVariable Long publicationId) {
         PublicationDto publication = publications.get(publicationId);
         return ResponseEntity.ok(publication);
     }
 
     @DeleteMapping(value = "{publicationId}", produces = "application/json")
-    public ResponseEntity deletePublication(@PathVariable Long publicationId) {
+    public ResponseEntity<PublicationDto> deletePublication(@PathVariable Long publicationId) {
         PublicationDto publication = publications.remove(publicationId);
         return ResponseEntity.ok(publication);
     }

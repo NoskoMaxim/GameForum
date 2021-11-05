@@ -12,60 +12,60 @@ info:
 host: "gameforum.swagger.io"
 basePath: "/game-forum"
 tags:
-- name: "publication"
-  description: "Everything about your publications"
-  externalDocs:
-    description: "Find out more"
-    url: "http://swagger.io"
-- name: "user"
-  description: "Operations about user"
-  externalDocs:
-    description: "Find out more about our store"
-    url: "http://swagger.io"  
+  - name: "publication"
+    description: "Everything about your publications"
+    externalDocs:
+      description: "Find out more"
+      url: "http://swagger.io"
+  - name: "user"
+    description: "Operations about user"
+    externalDocs:
+      description: "Find out more about our store"
+      url: "http://swagger.io"
 schemes:
-- "https"
-- "http"
+  - "https"
+  - "http"
 paths:
   /publication:
     post:
       tags:
-      - "publication"
+        - "publication"
       summary: "Add a new publication to the forum"
       description: ""
       operationId: "addPublication"
       consumes:
-      - "application/json"
+        - "application/json"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Publication object that needs to be added to the forum"
-        required: true
-        schema:
-          $ref: "#/definitions/Publication"
+        - in: "body"
+          name: "body"
+          description: "Publication object that needs to be added to the forum"
+          required: true
+          schema:
+            $ref: "#/definitions/Publication"
       responses:
         "400":
           description: "Bad request"
       security:
-      - petstore_auth:
-        - "write:publications"
-        - "read:publications"
+        - petstore_auth:
+            - "write:publications"
+            - "read:publications"
     put:
       tags:
-      - "publication"
+        - "publication"
       summary: "Update an existing publication"
       description: ""
       operationId: "updatePublication"
       consumes:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Publication object that needs to be added to the forum"
-        required: true
-        schema:
-          $ref: "#/definitions/Publication"
+        - in: "body"
+          name: "body"
+          description: "Publication object that needs to be added to the forum"
+          required: true
+          schema:
+            $ref: "#/definitions/Publication"
       responses:
         "400":
           description: "Invalid ID supplied"
@@ -74,28 +74,28 @@ paths:
         "405":
           description: "Validation exception"
       security:
-      - petstore_auth:
-        - "write:publications"
-        - "read:publications"
+        - petstore_auth:
+            - "write:publications"
+            - "read:publications"
   /publication/findByTitle:
     get:
       tags:
-      - "publication"
+        - "publication"
       summary: "Finds Publications by title"
-      description: "Multiple title values can be provided with comma separated strings"
+      description: "Multiple title values can be provided with space separated strings starting with "#"."
       operationId: "findPublicationsByTitle"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "title"
-        in: "query"
-        description: "Title values that need to be considered for filter"
-        required: true
-        type: "array"
-        items:
-          type: "string"
-          default: ""
-        collectionFormat: "multi"
+        - in: "query"
+          name: "title"
+          description: "Title values that need to be considered for filter"
+          required: true
+          type: "array"
+          items:
+            type: "string"
+            default: ""
+          collectionFormat: "multi"
       responses:
         "200":
           description: "successful operation"
@@ -106,25 +106,25 @@ paths:
         "400":
           description: "Invalid Title value"
       security:
-      - petstore_auth:
-        - "write:publications"
-        - "read:publications"  
+        - petstore_auth:
+            - "write:publications"
+            - "read:publications"
   /publication/{publicationId}:
     get:
       tags:
-      - "publication"
+        - "publication"
       summary: "Find publication by ID"
       description: "Returns a single publication"
       operationId: "getPublicationById"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "publicationId"
-        in: "path"
-        description: "ID of publication to return"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "publicationId"
+          in: "path"
+          description: "ID of publication to return"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         "200":
           description: "successful operation"
@@ -135,94 +135,94 @@ paths:
         "404":
           description: "Publication not found"
       security:
-      - petstore_auth:
-        - "read:publications"
+        - petstore_auth:
+            - "read:publications"
     delete:
       tags:
-      - "publication"
+        - "publication"
       summary: "Deletes a publication"
       description: ""
       operationId: "deletePublication"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "api_key"
-        in: "header"
-        required: false
-        type: "string"
-      - name: "publicationId"
-        in: "path"
-        description: "Publication id to delete"
-        required: true
-        type: "integer"
-        format: "int64"
+        - name: "api_key"
+          in: "header"
+          required: false
+          type: "string"
+        - name: "publicationId"
+          in: "path"
+          description: "Publication id to delete"
+          required: true
+          type: "integer"
+          format: "int64"
       responses:
         "400":
           description: "Invalid ID supplied"
         "404":
           description: "Publication not found"
       security:
-      - petstore_auth:
-        - "write:publications"
-        - "read:publications"      
+        - petstore_auth:
+            - "write:publications"
+            - "read:publications"
   /user:
     post:
       tags:
-      - "user"
+        - "user"
       summary: "Create user"
       description: "This can only be done by the logged in user."
       operationId: "createUser"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Created user object"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
+        - in: "body"
+          name: "body"
+          description: "Created user object"
+          required: true
+          schema:
+            $ref: "#/definitions/User"
       responses:
         default:
           description: "successful operation"
   /users:
     post:
       tags:
-      - "user"
+        - "user"
       summary: "Creates list of users with given input array"
       operationId: "createUsers"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - in: "body"
-        name: "body"
-        description: "List of user object"
-        required: true
-        schema:
-          type: "array"
-          items:
-            $ref: "#/definitions/User"
+        - in: "body"
+          name: "body"
+          description: "List of user object"
+          required: true
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/User"
       responses:
         default:
           description: "successful operation"
   /user/login:
     get:
       tags:
-      - "user"
+        - "user"
       summary: "Logs user into the system"
       operationId: "loginUser"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "username"
-        in: "query"
-        description: "The user name for login"
-        required: true
-        type: "string"
-      - name: "password"
-        in: "query"
-        description: "The password for login in clear text"
-        required: true
-        type: "string"
+        - name: "username"
+          in: "query"
+          description: "The user name for login"
+          required: true
+          type: "string"
+        - name: "password"
+          in: "query"
+          description: "The password for login in clear text"
+          required: true
+          type: "string"
       responses:
         "200":
           description: "successful operation"
@@ -240,29 +240,29 @@ paths:
   /user/logout:
     get:
       tags:
-      - "user"
+        - "user"
       summary: "Logs out current logged in user session"
       operationId: "logoutUser"
       produces:
-      - "application/json"
-      parameters: []
+        - "application/json"
+      parameters: [ ]
       responses:
         default:
           description: "successful operation"
   /user/{username}:
     get:
       tags:
-      - "user"
+        - "user"
       summary: "Get user by user name"
       operationId: "getUserByName"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "username"
-        in: "path"
-        description: "The name that needs to be fetched. Use user1 for testing. "
-        required: true
-        type: "string"
+        - name: "username"
+          in: "path"
+          description: "The name that needs to be fetched. Use user1 for testing. "
+          required: true
+          type: "string"
       responses:
         "200":
           description: "successful operation"
@@ -274,41 +274,41 @@ paths:
           description: "Invalid username supplied"
     put:
       tags:
-      - "user"
+        - "user"
       summary: "Updated user"
       description: "This can only be done by the logged in user."
       operationId: "updateUser"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "username"
-        in: "path"
-        description: "name that need to be updated"
-        required: true
-        type: "string"
-      - in: "body"
-        name: "body"
-        description: "Updated user object"
-        required: true
-        schema:
-          $ref: "#/definitions/User"
+        - name: "username"
+          in: "path"
+          description: "name that need to be updated"
+          required: true
+          type: "string"
+        - in: "body"
+          name: "body"
+          description: "Updated user object"
+          required: true
+          schema:
+            $ref: "#/definitions/User"
       responses:
         "400":
           description: "Invalid user/username supplied"
     delete:
       tags:
-      - "user"
+        - "user"
       summary: "Delete user"
       description: "This can only be done by the logged in user."
       operationId: "deleteUser"
       produces:
-      - "application/json"
+        - "application/json"
       parameters:
-      - name: "username"
-        in: "path"
-        description: "The name that needs to be deleted"
-        required: true
-        type: "string"
+        - name: "username"
+          in: "path"
+          description: "The name that needs to be deleted"
+          required: true
+          type: "string"
       responses:
         "400":
           description: "Invalid username supplied"
@@ -369,12 +369,12 @@ definitions:
         type: "string"
     xml:
       name: "Tag"
-      
+
   Publication:
     type: "object"
     required:
-    - "title"
-    - "content"
+      - "title"
+      - "content"
     properties:
       id:
         type: "integer"
@@ -391,7 +391,7 @@ definitions:
         type: "array"
         xml:
           name: "photoUrl"
-          wrapped: true 
+          wrapped: true
         items:
           type: "string"
       tags:
@@ -405,8 +405,8 @@ definitions:
         type: "string"
         description: "publication status in the forum"
         enum:
-        - "exists"
-        - "deleted"
-        - "edited"
+          - "exists"
+          - "deleted"
+          - "edited"
     xml:
       name: "Publication"
