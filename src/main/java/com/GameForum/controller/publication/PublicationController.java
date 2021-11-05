@@ -28,12 +28,12 @@ public class PublicationController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping(value = "/findByTitle", produces = "application/json") //Дописать
-    public ResponseEntity<List<PublicationDto>> findPublicationsByTitle(@RequestParam List<String> findByTitle) {
-        //publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals());
-        //findByTitle.forEach(tit -> publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals(tit)).collect(Collectors.toList()));
-        return (ResponseEntity<List<PublicationDto>>) ResponseEntity.ok(findByTitle.forEach(tit -> publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals(tit)).collect(Collectors.toList())));
-    }
+//    @GetMapping(value = "/findByTitle", produces = "application/json") //Дописать
+//    public ResponseEntity<List<PublicationDto>> findPublicationsByTitle(@RequestParam List<String> findByTitle) {
+//        //publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals());
+//        //findByTitle.forEach(tit -> publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals(tit)).collect(Collectors.toList()));
+//        //return (ResponseEntity<List<PublicationDto>>) ResponseEntity.ok(findByTitle.forEach(tit -> publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals(tit)).collect(Collectors.toList())));
+//    }
 
     @GetMapping(value = "{publicationId}", produces = "application/json")
     public ResponseEntity<PublicationDto> getPublicationById(@PathVariable Long publicationId) {
