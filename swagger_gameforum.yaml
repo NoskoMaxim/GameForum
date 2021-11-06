@@ -2,10 +2,10 @@ swagger: "2.0"
 info:
   description: "This is a simple Web-application that is a game forum"
   version: "1.0.0"
-  title: "Swagger Game Forum"
+  title: "Swagger GameForum"
   termsOfService: "http://swagger.io/terms/"
   contact:
-    email: "apiteam@swagger.io"
+    email: "maximnoskobsu2020@gmail.com"
   license:
     name: "Apache 2.0"
     url: "http://www.apache.org/licenses/LICENSE-2.0.html"
