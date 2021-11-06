@@ -81,5 +81,4 @@ public class UserController {
         user.setId((long) this.users.size());
         this.users.put(user.getUserData().getUsername(), user);
     }
-
 }
