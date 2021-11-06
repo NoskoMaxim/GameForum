@@ -1,5 +1,6 @@
 package com.GameForum.controller.user;
 
+import com.GameForum.config.gameforum.GameForumException;
 import com.GameForum.dto.OperationMessageDto;
 import com.GameForum.dto.user.UserDataDto;
 import com.GameForum.dto.user.UserDto;
@@ -34,16 +35,21 @@ public class UserController {
 
     @PostMapping(value = "/user/login", consumes = "application/json", produces = "application/json")
     public ResponseEntity loginUser(@RequestBody UserDataDto userData) {
-        Boolean isUsernameValidAndPasswordMatches = Optional.ofNullable(this.users.get(userData.getUsername()))
+        Boolean isUserExistsAndPasswordMatches = Optional.ofNullable(this.users.get(userData.getUsername()))
                 .map(user -> user.getUserData().getPassword().equals(userData.getPassword())).orElse(false);
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Rate-Limit", "1800");
         headers.add("X-Expires-After", LocalDateTime.now().plusHours(1).toString());
 
-        return isUsernameValidAndPasswordMatches
-                ? ResponseEntity.ok().headers(headers).body(new OperationMessageDto("Successful operation"))
-                : ResponseEntity.badRequest().body(new OperationMessageDto("Invalid username/password supplied"));
+        if (!isUserExistsAndPasswordMatches) {
+            HashMap<String, String> failures = new HashMap<>();
+            failures.put("username", "Nonexistent username");
+            failures.put("password", "Invalid password");
+            throw new GameForumException(failures);
+        }
+
+        return ResponseEntity.ok().headers(headers).body(new OperationMessageDto("Successful operation"));
     }
 
     @PostMapping(value = "/user/logout", consumes = "application/json", produces = "application/json")
