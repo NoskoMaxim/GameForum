@@ -62,7 +62,7 @@ paths:
       parameters:
         - in: "body"
           name: "body"
-          description: "Publication object that needs to be added to the forum"
+          description: "Publication object that needs to be changed to the forum"
           required: true
           schema:
             $ref: "#/definitions/Publication"
@@ -98,7 +98,7 @@ paths:
           collectionFormat: "multi"
       responses:
         "200":
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             type: "array"
             items:
@@ -172,6 +172,8 @@ paths:
       summary: "Create user"
       description: "This can only be done by the logged in user."
       operationId: "createUser"
+      consumes:
+        - "application/json"
       produces:
         - "application/json"
       parameters:
@@ -183,7 +185,7 @@ paths:
             $ref: "#/definitions/User"
       responses:
         default:
-          description: "successful operation"
+          description: "Successful operation"
   /users:
     post:
       tags:
@@ -205,27 +207,25 @@ paths:
         default:
           description: "successful operation"
   /user/login:
-    get:
+    post:
       tags:
         - "user"
       summary: "Logs user into the system"
       operationId: "loginUser"
+      consumes:
+        - "application/json"
       produces:
         - "application/json"
       parameters:
-        - name: "username"
-          in: "query"
-          description: "The user name for login"
+        - in: "body"
+          name: "body"
+          description: "Password and username(UserData)"
           required: true
-          type: "string"
-        - name: "password"
-          in: "query"
-          description: "The password for login in clear text"
-          required: true
-          type: "string"
+          schema:
+            $ref: "#/definitions/UserData"
       responses:
         "200":
-          description: "successful operation"
+          description: "Successful operation"
           schema:
             type: "string"
           headers:
@@ -238,17 +238,25 @@ paths:
         "400":
           description: "Invalid username/password supplied"
   /user/logout:
-    get:
+    post:
       tags:
         - "user"
       summary: "Logs out current logged in user session"
       operationId: "logoutUser"
+      consumes:
+        - "application/json"
       produces:
         - "application/json"
-      parameters: [ ]
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Password and username(UserData)"
+          required: false
+          schema:
+            $ref: "#/definitions/UserData"
       responses:
         default:
-          description: "successful operation"
+          description: "Successful operation"
   /user/{username}:
     get:
       tags:
@@ -341,24 +349,33 @@ definitions:
       id:
         type: "integer"
         format: "int64"
-      username:
-        type: "string"
       firstName:
         type: "string"
       lastName:
         type: "string"
       email:
         type: "string"
-      password:
-        type: "string"
       phone:
         type: "string"
       userStatus:
-        type: "integer"
-        format: "int32"
+        type: "string"
         description: "User Status"
+        enum:
+          - "online"
+          - "offline"
+      userData:
+          $ref: "#/definitions/UserData"
     xml:
       name: "User"
+  UserData:
+    type: "object"
+    properties:
+      username:
+        type: "string"
+      password:
+        type: "string"
+    xml:
+      name: "UserData"
   Tag:
     type: "object"
     properties:
@@ -369,6 +386,21 @@ definitions:
         type: "string"
     xml:
       name: "Tag"
+  Content:
+    type: "object"
+    required:
+      - "text"
+    properties:
+      text:
+        type: "string"
+        example: "MinecraftNews is a cool game"
+      photoUrls:
+        type: "array"
+        xml:
+          name: "photoUrl"
+          wrapped: true
+        items:
+          type: "string"
 
   Publication:
     type: "object"
@@ -385,15 +417,7 @@ definitions:
         type: "string"
         example: "MinecraftNews"
       content:
-        type: "string"
-        example: "MinecraftNews is a cool game"
-      photoUrls:
-        type: "array"
-        xml:
-          name: "photoUrl"
-          wrapped: true
-        items:
-          type: "string"
+        $ref: "#/definitions/Content"
       tags:
         type: "array"
         xml:
