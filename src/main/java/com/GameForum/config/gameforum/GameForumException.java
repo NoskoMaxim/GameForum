@@ -1,4 +1,4 @@
-package com.GameForum.config.gameforum;
+package com.gameforum.config.gameforum;
 
 import lombok.Getter;
 

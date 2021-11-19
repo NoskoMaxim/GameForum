@@ -77,25 +77,21 @@ paths:
         - petstore_auth:
             - "write:publications"
             - "read:publications"
-  /publication/findByTitle:
+  /publication/{titleName}:
     get:
       tags:
         - "publication"
       summary: "Finds Publications by title"
-      description: "Multiple title values can be provided with space separated strings starting with "#"."
+      description: "Multiple title values can be provided with commas separated"
       operationId: "findPublicationsByTitle"
       produces:
         - "application/json"
       parameters:
-        - in: "query"
-          name: "title"
+        - name: "titleName"
+          in: "path"
           description: "Title values that need to be considered for filter"
           required: true
-          type: "array"
-          items:
-            type: "string"
-            default: ""
-          collectionFormat: "multi"
+          type: "string"
       responses:
         "200":
           description: "Successful operation"

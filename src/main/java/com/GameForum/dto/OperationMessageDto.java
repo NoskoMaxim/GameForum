@@ -1,4 +1,4 @@
-package com.GameForum.dto;
+package com.gameforum.dto;
 
 import lombok.Data;
 

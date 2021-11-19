@@ -1,9 +1,9 @@
-package com.GameForum.dto.user;
+package com.gameforum.dto.user;
 
 import lombok.Data;
 
 @Data
-public class UserDataDto {
+public class UserSecurityDto {
     private String username;
     private String password;
 }

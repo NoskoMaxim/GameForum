@@ -1,47 +1,42 @@
-package com.GameForum.controller.publication;
+package com.gameforum.controller.publication;
 
-import com.GameForum.dto.publication.PublicationDto;
+import com.gameforum.dto.publication.PublicationDto;
+import com.gameforum.model.publication.Publication;
+import com.gameforum.service.publication.PublicationService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/game-forum/publication")
 public class PublicationController {
 
-    private final Map<Long, PublicationDto> publications = new HashMap<>();
+    private final PublicationService service;
 
-    @PostMapping(consumes = "application/json", produces = "application/json")
-    public ResponseEntity addPublication(@RequestBody PublicationDto publication) {
-        publication.setId((long) publications.size());
-        publications.put((long) publications.size(), publication);
-        return ResponseEntity.ok(publication);
+    @Autowired
+    public PublicationController(PublicationService service) {
+        this.service = service;
     }
 
-    @PutMapping(consumes = "application/json")
+    @PostMapping(value = "/create-post",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity addPublication(@RequestBody PublicationDto publicationDto) {
+        PublicationDto responsePublicationDto = service.addPublication(publicationDto);
+        return ResponseEntity.ok(responsePublicationDto);
+    }
+
+    @PutMapping(value = "/update-post",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updatePublication(@RequestBody PublicationDto publication) {
-        publications.put(publication.getId(), publication);
+        service.updatePublication(publication);
         return ResponseEntity.ok().build();
     }
 
-//    @GetMapping(value = "/findByTitle", produces = "application/json") //Дописать
-//    public ResponseEntity findPublicationsByTitle(@RequestParam List<String> findByTitle) {
-//        //publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals());
-//        //findByTitle.forEach(tit -> publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals(tit)).collect(Collectors.toList()));
-//        //return (ResponseEntity<List<PublicationDto>>) ResponseEntity.ok(findByTitle.forEach(tit -> publications.entrySet().stream().filter(publication -> publication.getValue().getTitle().equals(tit)).collect(Collectors.toList())));
-//    }
-
-    @GetMapping(value = "{publicationId}", produces = "application/json")
-    public ResponseEntity getPublicationById(@PathVariable Long publicationId) {
-        PublicationDto publication = publications.get(publicationId);
-        return ResponseEntity.ok(publication);
-    }
-
-    @DeleteMapping(value = "{publicationId}", produces = "application/json")
+    @DeleteMapping(value = "{publicationId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deletePublication(@PathVariable Long publicationId) {
-        PublicationDto publication = publications.remove(publicationId);
-        return ResponseEntity.ok(publication);
+        service.deletePublication(publicationId);
+        return ResponseEntity.ok().build();
     }
 }

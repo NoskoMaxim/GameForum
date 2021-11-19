@@ -1,4 +1,4 @@
-package com.GameForum.config.gameforum;
+package com.gameforum.config.gameforum;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

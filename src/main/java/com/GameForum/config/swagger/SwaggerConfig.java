@@ -1,4 +1,4 @@
-package com.GameForum.config.swagger;
+package com.gameforum.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ public class SwaggerConfig {
     public Docket projectApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.GameForum"))
+                .apis(RequestHandlerSelectors.basePackage("com.gameforum"))
                 .build()
                 .apiInfo(this.projectApiDetails());
     }

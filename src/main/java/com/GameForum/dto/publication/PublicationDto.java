@@ -1,17 +1,24 @@
-package com.GameForum.dto.publication;
+package com.gameforum.dto.publication;
 
-import com.GameForum.model.publication.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.gameforum.model.publication.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class PublicationDto {
     private Long id;
-    private CategoryDto category;
+    private Long userId;
     private String title;
-    private ContentDto content;
-    private List<TagDto> tag;
+    private StringBuilder content;
+    private String photoUrl;
+    private Set<TagDto> tags = new HashSet<>();
+    private Set<CategoryDto> categories = new HashSet<>();
     private PublicationStatus status;
+    private LocalDateTime shipDate;
+    private Long likes;
 }

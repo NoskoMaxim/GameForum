@@ -1,4 +1,4 @@
-package com.GameForum.model.user;
+package com.gameforum.model.user;
 
 public enum UserStatus {
     ONLINE,

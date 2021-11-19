@@ -1,4 +1,4 @@
-package com.GameForum;
+package com.gameforum;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +14,6 @@ public class GameForumServiceApplication {
 
     @Bean
     public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        return args -> System.out.println("Hello Word!");
+        return args -> System.out.println("GameForum is active and ready to go!");
     }
 }

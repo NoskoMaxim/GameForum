@@ -1,4 +1,4 @@
-package com.GameForum.controller.fileloader;
+package com.gameforum.controller.fileloader;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -38,5 +38,4 @@ public class FileLoaderController {
                 .contentLength(file.length)
                 .body(file);
     }
-
 }
