@@ -32,13 +32,13 @@ public class CategoryController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value = "/delete/category")
+    @DeleteMapping(value = "/delete-by-id")
     public ResponseEntity deleteCategoryById(@RequestParam Long id) {
         service.deleteCategoryById(id);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping(value = "/delete/category", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/delete-by-name", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deleteCategoryByName(@RequestParam String categoryName) {
         service.deleteCategoryByName(categoryName);
         return ResponseEntity.ok().build();

@@ -3,12 +3,11 @@ package com.gameforum.model.category;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gameforum.model.publication.Publication;
 import lombok.Data;
+import org.springframework.context.annotation.Primary;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "category")
@@ -19,9 +18,10 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
+
     private Long categoryId;
 
-    @Column(name = "category_name")
+    @Column(name = "category_name", unique = true)
     private String categoryName;
 
     @OneToMany(mappedBy = "category")
