@@ -1,432 +1,714 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
-  description: "This is a simple Web-application that is a game forum"
-  version: "1.0.0"
-  title: "Swagger GameForum"
-  termsOfService: "http://swagger.io/terms/"
-  contact:
-    email: "maximnoskobsu2020@gmail.com"
+  description: This is a simple Web-application that is a game forum
+  version: 1.0.0
+  title: Swagger GameForum
+  termsOfService: http://swagger.io/terms/
   license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "gameforum.swagger.io"
-basePath: "/game-forum"
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: localhost:8080
+basePath: /
 tags:
-  - name: "publication"
-    description: "Everything about your publications"
-    externalDocs:
-      description: "Find out more"
-      url: "http://swagger.io"
-  - name: "user"
-    description: "Operations about user"
-    externalDocs:
-      description: "Find out more about our store"
-      url: "http://swagger.io"
-schemes:
-  - "https"
-  - "http"
+  - name: category-controller
+    description: Category Controller
+  - name: file-loader-controller
+    description: File Loader Controller
+  - name: forum-controller
+    description: Forum Controller
+  - name: publication-controller
+    description: Publication Controller
+  - name: user-controller
+    description: User Controller
 paths:
-  /publication:
+  /game-forum/category/create:
     post:
       tags:
-        - "publication"
-      summary: "Add a new publication to the forum"
-      description: ""
-      operationId: "addPublication"
+        - category-controller
+      summary: addCategory
+      operationId: addCategoryUsingPOST
       consumes:
-        - "application/json"
+        - application/json
       produces:
-        - "application/json"
+        - '*/*'
       parameters:
-        - in: "body"
-          name: "body"
-          description: "Publication object that needs to be added to the forum"
+        - in: body
+          name: categoryDto
+          description: categoryDto
           required: true
           schema:
-            $ref: "#/definitions/Publication"
+            $ref: '#/definitions/CategoryDto'
       responses:
-        "400":
-          description: "Bad request"
-      security:
-        - petstore_auth:
-            - "write:publications"
-            - "read:publications"
-    put:
-      tags:
-        - "publication"
-      summary: "Update an existing publication"
-      description: ""
-      operationId: "updatePublication"
-      consumes:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Publication object that needs to be changed to the forum"
-          required: true
+        '200':
+          description: OK
           schema:
-            $ref: "#/definitions/Publication"
-      responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Publication not found"
-        "405":
-          description: "Validation exception"
-      security:
-        - petstore_auth:
-            - "write:publications"
-            - "read:publications"
-  /publication/{titleName}:
-    get:
-      tags:
-        - "publication"
-      summary: "Finds Publications by title"
-      description: "Multiple title values can be provided with commas separated"
-      operationId: "findPublicationsByTitle"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "titleName"
-          in: "path"
-          description: "Title values that need to be considered for filter"
-          required: true
-          type: "string"
-      responses:
-        "200":
-          description: "Successful operation"
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/Publication"
-        "400":
-          description: "Invalid Title value"
-      security:
-        - petstore_auth:
-            - "write:publications"
-            - "read:publications"
-  /publication/{publicationId}:
-    get:
-      tags:
-        - "publication"
-      summary: "Find publication by ID"
-      description: "Returns a single publication"
-      operationId: "getPublicationById"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "publicationId"
-          in: "path"
-          description: "ID of publication to return"
-          required: true
-          type: "integer"
-          format: "int64"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/Publication"
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Publication not found"
-      security:
-        - petstore_auth:
-            - "read:publications"
+            $ref: '#/definitions/ResponseEntity'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/category/delete/category:
     delete:
       tags:
-        - "publication"
-      summary: "Deletes a publication"
-      description: ""
-      operationId: "deletePublication"
+        - category-controller
+      summary: deleteCategoryByName
+      operationId: deleteCategoryByNameUsingDELETE
       produces:
-        - "application/json"
+        - application/json
       parameters:
-        - name: "api_key"
-          in: "header"
-          required: false
-          type: "string"
-        - name: "publicationId"
-          in: "path"
-          description: "Publication id to delete"
+        - name: categoryName
+          in: query
+          description: categoryName
           required: true
-          type: "integer"
-          format: "int64"
+          type: string
       responses:
-        "400":
-          description: "Invalid ID supplied"
-        "404":
-          description: "Publication not found"
-      security:
-        - petstore_auth:
-            - "write:publications"
-            - "read:publications"
-  /user:
-    post:
-      tags:
-        - "user"
-      summary: "Create user"
-      description: "This can only be done by the logged in user."
-      operationId: "createUser"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Created user object"
-          required: true
+        '200':
+          description: OK
           schema:
-            $ref: "#/definitions/User"
-      responses:
-        default:
-          description: "Successful operation"
-  /users:
-    post:
-      tags:
-        - "user"
-      summary: "Creates list of users with given input array"
-      operationId: "createUsers"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "List of user object"
-          required: true
-          schema:
-            type: "array"
-            items:
-              $ref: "#/definitions/User"
-      responses:
-        default:
-          description: "successful operation"
-  /user/login:
-    post:
-      tags:
-        - "user"
-      summary: "Logs user into the system"
-      operationId: "loginUser"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Password and username(UserData)"
-          required: true
-          schema:
-            $ref: "#/definitions/UserData"
-      responses:
-        "200":
-          description: "Successful operation"
-          schema:
-            type: "string"
-          headers:
-            X-Rate-Limit:
-              type: "integer"
-              description: "calls per hour allowed by the user"
-            X-Expires-After:
-              type: "string"
-              description: "date in UTC when token expires"
-        "400":
-          description: "Invalid username/password supplied"
-  /user/logout:
-    post:
-      tags:
-        - "user"
-      summary: "Logs out current logged in user session"
-      operationId: "logoutUser"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "body"
-          description: "Password and username(UserData)"
-          required: false
-          schema:
-            $ref: "#/definitions/UserData"
-      responses:
-        default:
-          description: "Successful operation"
-  /user/{username}:
-    get:
-      tags:
-        - "user"
-      summary: "Get user by user name"
-      operationId: "getUserByName"
-      produces:
-        - "application/json"
-      parameters:
-        - name: "username"
-          in: "path"
-          description: "The name that needs to be fetched. Use user1 for testing. "
-          required: true
-          type: "string"
-      responses:
-        "200":
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/User"
-        "204":
-          description: "User not found"
-        "400":
-          description: "Invalid username supplied"
+            $ref: '#/definitions/ResponseEntity'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /game-forum/category/update:
     put:
       tags:
-        - "user"
-      summary: "Updated user"
-      description: "This can only be done by the logged in user."
-      operationId: "updateUser"
+        - category-controller
+      summary: updateCategory
+      operationId: updateCategoryUsingPUT
+      consumes:
+        - application/json
       produces:
-        - "application/json"
+        - '*/*'
       parameters:
-        - name: "username"
-          in: "path"
-          description: "name that need to be updated"
-          required: true
-          type: "string"
-        - in: "body"
-          name: "body"
-          description: "Updated user object"
+        - in: body
+          name: categoryDto
+          description: categoryDto
           required: true
           schema:
-            $ref: "#/definitions/User"
+            $ref: '#/definitions/CategoryDto'
       responses:
-        "400":
-          description: "Invalid user/username supplied"
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/file/{fileName}:
+    get:
+      tags:
+        - file-loader-controller
+      summary: download
+      operationId: downloadUsingGET
+      produces:
+        - multipart/form-data
+      parameters:
+        - name: fileName
+          in: path
+          description: fileName
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+    post:
+      tags:
+        - file-loader-controller
+      summary: upload
+      operationId: uploadUsingPOST
+      consumes:
+        - multipart/form-data
+      produces:
+        - '*/*'
+      parameters:
+        - name: file
+          in: formData
+          required: false
+          type: file
+        - name: fileName
+          in: path
+          description: fileName
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/forum/all-category:
+    get:
+      tags:
+        - forum-controller
+      summary: getAllCategories
+      operationId: getAllCategoriesUsingGET
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/forum/all-publications:
+    get:
+      tags:
+        - forum-controller
+      summary: getAllPublications
+      operationId: getAllPublicationsUsingGET
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/forum/post/category:
+    get:
+      tags:
+        - forum-controller
+      summary: findPublicationsByCategory
+      operationId: findPublicationsByCategoryUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: query
+          description: id
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/forum/rating:
+    get:
+      tags:
+        - forum-controller
+      summary: getRatingPublications
+      operationId: getRatingPublicationsUsingGET
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/forum/title:
+    get:
+      tags:
+        - forum-controller
+      summary: findPublicationsByTitle
+      operationId: findPublicationsByTitleUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: titleName
+          in: query
+          description: titleName
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/forum/user/name:
+    get:
+      tags:
+        - forum-controller
+      summary: findUserByName
+      operationId: findUserByNameUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: username
+          in: query
+          description: username
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/forum/{publicationId}:
+    get:
+      tags:
+        - forum-controller
+      summary: findPublicationById
+      operationId: findPublicationByIdUsingGET
+      produces:
+        - application/json
+      parameters:
+        - name: publicationId
+          in: path
+          description: publicationId
+          required: true
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/publication/create:
+    post:
+      tags:
+        - publication-controller
+      summary: addPublication
+      operationId: addPublicationUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: publicationDto
+          description: publicationDto
+          required: true
+          schema:
+            $ref: '#/definitions/PublicationDto'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/publication/update:
+    put:
+      tags:
+        - publication-controller
+      summary: updatePublication
+      operationId: updatePublicationUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - '*/*'
+      parameters:
+        - in: body
+          name: publicationDto
+          description: publicationDto
+          required: true
+          schema:
+            $ref: '#/definitions/PublicationDto'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/publication/{publicationId}:
     delete:
       tags:
-        - "user"
-      summary: "Delete user"
-      description: "This can only be done by the logged in user."
-      operationId: "deleteUser"
+        - publication-controller
+      summary: deletePublication
+      operationId: deletePublicationUsingDELETE
       produces:
-        - "application/json"
+        - application/json
       parameters:
-        - name: "username"
-          in: "path"
-          description: "The name that needs to be deleted"
+        - name: publicationId
+          in: path
+          description: publicationId
           required: true
-          type: "string"
+          type: integer
+          format: int64
       responses:
-        "400":
-          description: "Invalid username supplied"
-securityDefinitions:
-  petstore_auth:
-    type: "oauth2"
-    authorizationUrl: "http://gameforumswagger.io/oauth/dialog"
-    flow: "implicit"
-    scopes:
-      write:publications: "modify publications in your account"
-      read:publications: "read your publications"
-  api_key:
-    type: "apiKey"
-    name: "api_key"
-    in: "header"
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+  /game-forum/user/create:
+    post:
+      tags:
+        - user-controller
+      summary: createUser
+      operationId: createUserUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: userSecurityDto
+          description: userSecurityDto
+          required: true
+          schema:
+            $ref: '#/definitions/UserSecurityDto'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/user/login:
+    post:
+      tags:
+        - user-controller
+      summary: loginUser
+      operationId: loginUserUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: userSecurityDto
+          description: userSecurityDto
+          required: true
+          schema:
+            $ref: '#/definitions/UserSecurityDto'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/user/logout:
+    post:
+      tags:
+        - user-controller
+      summary: logoutUser
+      operationId: logoutUserUsingPOST
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: userDto
+          description: userDto
+          required: true
+          schema:
+            $ref: '#/definitions/UserDto'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/user/update:
+    put:
+      tags:
+        - user-controller
+      summary: updateUser
+      operationId: updateUserUsingPUT
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: userDto
+          description: userDto
+          required: true
+          schema:
+            $ref: '#/definitions/UserDto'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '201':
+          description: Created
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+  /game-forum/user/{username}:
+    delete:
+      tags:
+        - user-controller
+      summary: deleteUser
+      operationId: deleteUserUsingDELETE
+      produces:
+        - application/json
+      parameters:
+        - name: username
+          in: path
+          description: username
+          required: true
+          type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/ResponseEntity'
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
 definitions:
-  Category:
-    type: "object"
+  CategoryDto:
+    type: object
     properties:
-      id:
-        type: "integer"
-        format: "int64"
-      name:
-        type: "string"
-    xml:
-      name: "Category"
-  User:
-    type: "object"
+      categoryId:
+        type: integer
+        format: int64
+      categoryName:
+        type: string
+    title: CategoryDto
+  PublicationDto:
+    type: object
     properties:
-      id:
-        type: "integer"
-        format: "int64"
-      firstName:
-        type: "string"
-      lastName:
-        type: "string"
-      email:
-        type: "string"
-      phone:
-        type: "string"
-      userStatus:
-        type: "string"
-        description: "User Status"
-        enum:
-          - "online"
-          - "offline"
-      userData:
-          $ref: "#/definitions/UserData"
-    xml:
-      name: "User"
-  UserData:
-    type: "object"
-    properties:
-      username:
-        type: "string"
-      password:
-        type: "string"
-    xml:
-      name: "UserData"
-  Tag:
-    type: "object"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      name:
-        type: "string"
-    xml:
-      name: "Tag"
-  Content:
-    type: "object"
-    required:
-      - "text"
-    properties:
-      text:
-        type: "string"
-        example: "MinecraftNews is a cool game"
-      photoUrls:
-        type: "array"
-        xml:
-          name: "photoUrl"
-          wrapped: true
-        items:
-          type: "string"
-
-  Publication:
-    type: "object"
-    required:
-      - "title"
-      - "content"
-    properties:
-      id:
-        type: "integer"
-        format: "int64"
-      category:
-        $ref: "#/definitions/Category"
-      title:
-        type: "string"
-        example: "MinecraftNews"
+      categoryId:
+        type: integer
+        format: int64
+      categoryName:
+        type: string
       content:
-        $ref: "#/definitions/Content"
-      tags:
-        type: "array"
-        xml:
-          name: "tag"
-          wrapped: true
-        items:
-          $ref: "#/definitions/Tag"
+        type: string
+      likes:
+        type: integer
+        format: int64
+      photo:
+        type: string
+        format: byte
+      publicationId:
+        type: integer
+        format: int64
+      shipDate:
+        type: string
+        format: date-time
       status:
-        type: "string"
-        description: "publication status in the forum"
+        type: string
         enum:
-          - "exists"
-          - "deleted"
-          - "edited"
-    xml:
-      name: "Publication"
+          - DELETED
+          - EDITED
+          - EXISTS
+      title:
+        type: string
+      userId:
+        type: integer
+        format: int64
+      username:
+        type: string
+    title: PublicationDto
+  ResponseEntity:
+    type: object
+    properties:
+      body:
+        type: object
+      statusCode:
+        type: string
+        enum:
+          - ACCEPTED
+          - ALREADY_REPORTED
+          - BAD_GATEWAY
+          - BAD_REQUEST
+          - BANDWIDTH_LIMIT_EXCEEDED
+          - CHECKPOINT
+          - CONFLICT
+          - CONTINUE
+          - CREATED
+          - DESTINATION_LOCKED
+          - EXPECTATION_FAILED
+          - FAILED_DEPENDENCY
+          - FORBIDDEN
+          - FOUND
+          - GATEWAY_TIMEOUT
+          - GONE
+          - HTTP_VERSION_NOT_SUPPORTED
+          - IM_USED
+          - INSUFFICIENT_SPACE_ON_RESOURCE
+          - INSUFFICIENT_STORAGE
+          - INTERNAL_SERVER_ERROR
+          - I_AM_A_TEAPOT
+          - LENGTH_REQUIRED
+          - LOCKED
+          - LOOP_DETECTED
+          - METHOD_FAILURE
+          - METHOD_NOT_ALLOWED
+          - MOVED_PERMANENTLY
+          - MOVED_TEMPORARILY
+          - MULTIPLE_CHOICES
+          - MULTI_STATUS
+          - NETWORK_AUTHENTICATION_REQUIRED
+          - NON_AUTHORITATIVE_INFORMATION
+          - NOT_ACCEPTABLE
+          - NOT_EXTENDED
+          - NOT_FOUND
+          - NOT_IMPLEMENTED
+          - NOT_MODIFIED
+          - NO_CONTENT
+          - OK
+          - PARTIAL_CONTENT
+          - PAYLOAD_TOO_LARGE
+          - PAYMENT_REQUIRED
+          - PERMANENT_REDIRECT
+          - PRECONDITION_FAILED
+          - PRECONDITION_REQUIRED
+          - PROCESSING
+          - PROXY_AUTHENTICATION_REQUIRED
+          - REQUESTED_RANGE_NOT_SATISFIABLE
+          - REQUEST_ENTITY_TOO_LARGE
+          - REQUEST_HEADER_FIELDS_TOO_LARGE
+          - REQUEST_TIMEOUT
+          - REQUEST_URI_TOO_LONG
+          - RESET_CONTENT
+          - SEE_OTHER
+          - SERVICE_UNAVAILABLE
+          - SWITCHING_PROTOCOLS
+          - TEMPORARY_REDIRECT
+          - TOO_EARLY
+          - TOO_MANY_REQUESTS
+          - UNAUTHORIZED
+          - UNAVAILABLE_FOR_LEGAL_REASONS
+          - UNPROCESSABLE_ENTITY
+          - UNSUPPORTED_MEDIA_TYPE
+          - UPGRADE_REQUIRED
+          - URI_TOO_LONG
+          - USE_PROXY
+          - VARIANT_ALSO_NEGOTIATES
+      statusCodeValue:
+        type: integer
+        format: int32
+    title: ResponseEntity
+  UserDto:
+    type: object
+    properties:
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      userId:
+        type: integer
+        format: int64
+      userRole:
+        type: string
+        enum:
+          - ADMIN
+          - USER
+          - VISITOR
+      username:
+        type: string
+    title: UserDto
+  UserSecurityDto:
+    type: object
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    title: UserSecurityDto
