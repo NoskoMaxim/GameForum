@@ -1,7 +1,6 @@
 package com.gameforum.controller.publication;
 
 import com.gameforum.dto.publication.PublicationDto;
-import com.gameforum.model.publication.Publication;
 import com.gameforum.service.publication.PublicationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,18 +18,17 @@ public class PublicationController {
         this.service = service;
     }
 
-    @PostMapping(value = "/create-post",
-            consumes = MediaType.APPLICATION_JSON_VALUE,
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/create",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addPublication(@RequestBody PublicationDto publicationDto) {
-        PublicationDto responsePublicationDto = service.addPublication(publicationDto);
-        return ResponseEntity.ok(responsePublicationDto);
+        service.addPublication(publicationDto);
+        return ResponseEntity.ok().build();
     }
 
-    @PutMapping(value = "/update-post",
+    @PutMapping(value = "/update",
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity updatePublication(@RequestBody PublicationDto publication) {
-        service.updatePublication(publication);
+    public ResponseEntity updatePublication(@RequestBody PublicationDto publicationDto) {
+        service.updatePublication(publicationDto);
         return ResponseEntity.ok().build();
     }
 

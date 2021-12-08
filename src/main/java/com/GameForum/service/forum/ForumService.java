@@ -2,10 +2,11 @@ package com.gameforum.service.forum;
 
 import com.gameforum.dto.publication.CategoryDto;
 import com.gameforum.dto.publication.PublicationDto;
-import com.gameforum.dto.publication.TagDto;
 import com.gameforum.dto.user.UserDto;
+import com.gameforum.model.category.Category;
 import com.gameforum.model.publication.Publication;
 import com.gameforum.model.user.User;
+import com.gameforum.repository.publication.CategoryRepos;
 import com.gameforum.repository.publication.PublicationRepos;
 import com.gameforum.repository.user.UserRepos;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,13 @@ public class ForumService {
 
     private final PublicationRepos publicationRepos;
     private final UserRepos userRepos;
+    private final CategoryRepos categoryRepos;
 
     @Autowired
-    public ForumService(PublicationRepos publicationRepos, UserRepos userRepos) {
+    public ForumService(PublicationRepos publicationRepos, UserRepos userRepos, CategoryRepos categoryRepos) {
         this.publicationRepos = publicationRepos;
         this.userRepos = userRepos;
+        this.categoryRepos = categoryRepos;
     }
 
     public List<PublicationDto> getAllPublications() {
@@ -32,14 +35,29 @@ public class ForumService {
         return convertPublicationListToPublicationDtoList(publications);
     }
 
+    public List<PublicationDto> getRatingPublications() {
+        List<Publication> publications = publicationRepos.findPublicationsByLikesIsBefore(5L);
+        return convertPublicationListToPublicationDtoList(publications);
+    }
+
+    public List<CategoryDto> getAllCategories() {
+        List<Category> categories = categoryRepos.findAll();
+        return convertCategoryListToCategoryDtoList(categories);
+    }
+
     public List<PublicationDto> findPublicationsByTitle(String titleName) {
         List<Publication> publications = publicationRepos.findPublicationsByTitle(titleName);
         return convertPublicationListToPublicationDtoList(publications);
     }
 
-    public PublicationDto findPublicationById(Long publicationId) {
+    public List<PublicationDto> findPublicationsByCategory(Long categoryId) {
+        List<Publication> publications = publicationRepos.findPublicationsByCategory_CategoryId(categoryId);
+        return convertPublicationListToPublicationDtoList(publications);
+    }
+
+    public Optional<PublicationDto> findPublicationById(Long publicationId) {
         Optional<Publication> publication = publicationRepos.findById(publicationId);
-        return publication.map(this::convertPublicationToPublicationDto).orElse(null);
+        return publication.map(this::convertPublicationToPublicationDto);
     }
 
     public Optional<UserDto> findUserByName(String username) {
@@ -57,31 +75,43 @@ public class ForumService {
 
     private PublicationDto convertPublicationToPublicationDto(Publication publication) {
         PublicationDto publicationDto = new PublicationDto();
-        publicationDto.setId(publication.getId());
+        publicationDto.setPublicationId(publication.getPublicationId());
+        publicationDto.setUserId(publication.getUser().getUserId());
+        publicationDto.setUsername(publication.getUser().getUsername());
         publicationDto.setTitle(publication.getTitle());
+        publicationDto.setContent(publication.getContent());
+        publicationDto.setPhoto(publication.getPhoto());
+        publicationDto.setCategoryName(publication.getCategory().getCategoryName());
+        publicationDto.setCategoryId(publication.getCategory().getCategoryId());
         publicationDto.setStatus(publication.getStatus());
         publicationDto.setShipDate(publication.getShipDate());
         publicationDto.setLikes(publication.getLikes());
-        publicationDto.setContent(publication.getContent());
-        publicationDto.setPhotoUrl(publication.getPhotoUrl());
-        publication.getCategories()
-                .forEach(category -> publicationDto.getCategories()
-                        .add(new CategoryDto(category.getId(), category.getCategory())));
-        publication.getTags()
-                .forEach(tag -> publicationDto.getTags()
-                        .add(new TagDto(tag.getId(), tag.getTag())));
+
         return publicationDto;
+    }
+
+    private List<CategoryDto> convertCategoryListToCategoryDtoList(List<Category> categories) {
+        List<CategoryDto> categoriesDto = new ArrayList<>();
+        categories.forEach(category -> categoriesDto
+                .add(convertCategoryToCategoryDto(category)));
+        return categoriesDto;
+    }
+
+    private CategoryDto convertCategoryToCategoryDto(Category category) {
+        CategoryDto categoryDto = new CategoryDto();
+        categoryDto.setCategoryId(category.getCategoryId());
+        categoryDto.setCategoryName(category.getCategoryName());
+        return categoryDto;
     }
 
     private UserDto convertUserToUserDto(User user) {
         UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
+        userDto.setUserId(user.getUserId());
         userDto.setUsername(user.getUsername());
         userDto.setFirstName(user.getFirstName());
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail());
         userDto.setPhone(user.getPhone());
-        userDto.setUserStatus(user.getUserStatus());
         userDto.setUserRole(user.getUserRole());
         return userDto;
     }

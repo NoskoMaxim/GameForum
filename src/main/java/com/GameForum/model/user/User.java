@@ -1,17 +1,23 @@
 package com.gameforum.model.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.gameforum.model.publication.Publication;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "username")
     private String username;
@@ -32,12 +38,11 @@ public class User {
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "user_status")
-    private UserStatus userStatus;
-
-    @Enumerated(EnumType.STRING)
     @Column(name = "user_role")
     private UserRole userRole;
+
+    @OneToMany(mappedBy = "user")
+    List<Publication> publications = new ArrayList<>();
 
     public User() {
     }

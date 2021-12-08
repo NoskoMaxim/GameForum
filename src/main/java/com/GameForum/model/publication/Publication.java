@@ -1,24 +1,22 @@
 package com.gameforum.model.publication;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gameforum.model.category.Category;
-import com.gameforum.model.tag.Tag;
+import com.gameforum.model.user.User;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "publication")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Publication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "publication_id")
+    private Long publicationId;
 
     @Column(name = "title")
     private String title;
@@ -34,22 +32,18 @@ public class Publication {
     private Long likes;
 
     @Column(name = "content")
-    private StringBuilder content;
+    private String content;
 
-    @Column(name = "photo_url")
-    private String photoUrl;
+    @Column(name = "photo")
+    private byte[] photo;
 
-    @ManyToMany
-    @JoinTable(name = "publication_category",
-            joinColumns = @JoinColumn(name = "publication_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    Set<Category> categories = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id", nullable=false)
+    private User user;
 
-    @ManyToMany
-    @JoinTable(name = "publication_tag",
-            joinColumns = @JoinColumn(name = "publication_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    Set<Tag> tags = new HashSet<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="category_id", nullable=false, insertable = false, updatable = false)
+    private Category category;
 
     public Publication() {
     }

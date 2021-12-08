@@ -4,7 +4,6 @@ import com.gameforum.dto.user.UserDto;
 import com.gameforum.dto.user.UserSecurityDto;
 import com.gameforum.model.user.User;
 import com.gameforum.model.user.UserRole;
-import com.gameforum.model.user.UserStatus;
 import com.gameforum.repository.user.UserRepos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,6 @@ public class UserService {
 
     public void createUser(UserSecurityDto userSecurityDto) {
         User user = new User();
-        user.setUserStatus(UserStatus.ONLINE);
         user.setUserRole(UserRole.USER);
         user.setUsername(userSecurityDto.getUsername());
         user.setPassword(userSecurityDto.getPassword());
@@ -32,14 +30,13 @@ public class UserService {
 
     public void updateUser(UserDto userDto) {
         User user = new User();
-        user.setId(userDto.getId());
+        user.setUserId(userDto.getUserId());
         user.setUsername(userDto.getUsername());
         user.setPassword(userDto.getPassword());
         user.setFirstName(userDto.getFirstName());
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail());
         user.setPhone(userDto.getPhone());
-        user.setUserStatus(userDto.getUserStatus());
         user.setUserRole((userDto.getUserRole()));
         userRepos.save(user);
     }
@@ -49,22 +46,18 @@ public class UserService {
     }
 
     public Boolean loginUser(UserSecurityDto userSecurityDto) {
-        Boolean isUserExistsAndPasswordMatches = true;
+        Boolean isUserExistsAndPasswordMatches = Boolean.TRUE;
         Optional<User> user = userRepos.findUserByUsername(userSecurityDto.getUsername());
         if (user.isPresent() && user.get().getPassword().equals(userSecurityDto.getPassword())) {
-            user.get().setUserStatus(UserStatus.ONLINE);
             userRepos.save(user.get());
         } else {
-            isUserExistsAndPasswordMatches = false;
+            isUserExistsAndPasswordMatches = Boolean.FALSE;
         }
         return isUserExistsAndPasswordMatches;
     }
 
     public void logoutUser(UserDto userDto) {
-        Optional<User> user = userRepos.findById(userDto.getId());
-        user.ifPresent(user1 -> {
-            user1.setUserStatus(UserStatus.OFFLINE);
-            userRepos.save(user1);
-        });
+        Optional<User> user = userRepos.findById(userDto.getUserId());
+        user.ifPresent(userRepos::save);
     }
 }

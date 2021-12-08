@@ -26,7 +26,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping(value = "/create-user",
+    @PostMapping(value = "/create",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createUser(@RequestBody UserSecurityDto userSecurityDto) {
@@ -34,7 +34,7 @@ public class UserController {
         return ResponseEntity.ok(new OperationMessageDto("Successful operation"));
     }
 
-    @PutMapping(value = "/update-user",
+    @PutMapping(value = "/update",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateUser(@RequestBody UserDto userDto) {

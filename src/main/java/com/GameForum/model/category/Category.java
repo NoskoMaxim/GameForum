@@ -1,5 +1,6 @@
 package com.gameforum.model.category;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gameforum.model.publication.Publication;
 import lombok.Data;
 
@@ -12,22 +13,25 @@ import java.util.Set;
 @Entity
 @Table(name = "category")
 @Data
+@JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "category_id")
+    private Long categoryId;
 
-    @Column(name = "category")
-    private String category;
+    @Column(name = "category_name")
+    private String categoryName;
 
-    @ManyToMany(mappedBy = "categories")
-    private Set<Publication> publications = new HashSet<>();
-
-    public Category(String category) {
-        this.category = category;
-    }
+    @OneToMany(mappedBy = "category")
+    List<Publication> publications = new ArrayList<>();
 
     public Category() {
+    }
+
+    public Category(Long categoryId, String categoryName) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
     }
 }
