@@ -1,5 +1,6 @@
 package com.gameforum.config.gameforum;
 
+import com.gameforum.config.gameforum.exception.gameforumexception.GameForumException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

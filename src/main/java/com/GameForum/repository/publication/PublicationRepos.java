@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface PublicationRepos extends JpaRepository<Publication, Long> {
-    List<Publication> findPublicationsByCategory_CategoryId(Long categoryId);
+    List<Publication> findPublicationsByPublicationCategory_CategoryId(Long categoryId);
     List<Publication> findPublicationsByTitle(String titleName);
     List<Publication> findPublicationsByLikesIsBefore(Long likesNumber);
 }

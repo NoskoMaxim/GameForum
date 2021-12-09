@@ -1,6 +1,7 @@
 package com.gameforum.dto.user;
 
 import com.gameforum.model.user.UserRole;
+import com.gameforum.model.user.UserStatus;
 import lombok.Data;
 
 @Data
@@ -13,4 +14,5 @@ public class UserDto {
     private String email;
     private String phone;
     private UserRole userRole;
+    private UserStatus userStatus;
 }

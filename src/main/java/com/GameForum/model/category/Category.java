@@ -3,14 +3,13 @@ package com.gameforum.model.category;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.gameforum.model.publication.Publication;
 import lombok.Data;
-import org.springframework.context.annotation.Primary;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "category")
+@Table(name = "category", schema = "public")
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Category {
@@ -18,13 +17,13 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
-
+    @PrimaryKeyJoinColumn
     private Long categoryId;
 
     @Column(name = "category_name", unique = true)
     private String categoryName;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "publicationCategory", fetch = FetchType.LAZY)
     List<Publication> publications = new ArrayList<>();
 
     public Category() {

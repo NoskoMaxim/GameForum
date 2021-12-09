@@ -4,27 +4,32 @@ import com.gameforum.dto.user.UserDto;
 import com.gameforum.dto.user.UserSecurityDto;
 import com.gameforum.model.user.User;
 import com.gameforum.model.user.UserRole;
+import com.gameforum.model.user.UserStatus;
 import com.gameforum.repository.user.UserRepos;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
-public class UserService {
+public class UserService  {
 
     private final UserRepos userRepos;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepos userRepos) {
+    public UserService(UserRepos userRepos, BCryptPasswordEncoder passwordEncoder) {
         this.userRepos = userRepos;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public void createUser(UserSecurityDto userSecurityDto) {
+    public void registerUser(UserSecurityDto userSecurityDto) {
         User user = new User();
         user.setUserRole(UserRole.USER);
         user.setUsername(userSecurityDto.getUsername());
-        user.setPassword(userSecurityDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userSecurityDto.getPassword()));
+        user.setUserStatus(UserStatus.ONLINE);
         userRepos.save(user);
     }
 
@@ -45,19 +50,12 @@ public class UserService {
         userRepos.deleteUserByUsername(username);
     }
 
-    public Boolean loginUser(UserSecurityDto userSecurityDto) {
-        Boolean isUserExistsAndPasswordMatches = Boolean.TRUE;
-        Optional<User> user = userRepos.findUserByUsername(userSecurityDto.getUsername());
-        if (user.isPresent() && user.get().getPassword().equals(userSecurityDto.getPassword())) {
-            userRepos.save(user.get());
-        } else {
-            isUserExistsAndPasswordMatches = Boolean.FALSE;
-        }
-        return isUserExistsAndPasswordMatches;
-    }
-
     public void logoutUser(UserDto userDto) {
         Optional<User> user = userRepos.findById(userDto.getUserId());
         user.ifPresent(userRepos::save);
+    }
+
+    public Optional<User> findUserByUsername(String username){
+        return userRepos.findUserByUsername(username);
     }
 }

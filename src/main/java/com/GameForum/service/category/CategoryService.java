@@ -1,11 +1,9 @@
 package com.gameforum.service.category;
 
-import com.gameforum.config.gameforum.GameForumException;
+import com.gameforum.config.gameforum.exception.gameforumexception.GameForumException;
 import com.gameforum.dto.publication.CategoryDto;
 import com.gameforum.model.category.Category;
 import com.gameforum.repository.publication.CategoryRepos;
-import org.hibernate.exception.ConstraintViolationException;
-import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;

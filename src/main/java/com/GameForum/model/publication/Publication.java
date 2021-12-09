@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "publication")
+@Table(name = "publication", schema = "public")
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class Publication {
@@ -43,7 +43,7 @@ public class Publication {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="category_id", nullable=false, insertable = false, updatable = false)
-    private Category category;
+    private Category publicationCategory;
 
     public Publication() {
     }

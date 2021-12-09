@@ -1,4 +1,4 @@
-package com.gameforum.config.gameforum;
+package com.gameforum.config.gameforum.exception.gameforumexception;
 
 import lombok.Getter;
 

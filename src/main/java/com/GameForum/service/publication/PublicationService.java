@@ -47,7 +47,7 @@ public class PublicationService {
         publication.setTitle(publicationDto.getTitle());
         publication.setContent(publicationDto.getContent());
         publication.setPhoto(publicationDto.getPhoto());
-        publication.setCategory(new
+        publication.setPublicationCategory(new
                 Category(publicationDto.getCategoryId(),publicationDto.getCategoryName()));
     }
 }

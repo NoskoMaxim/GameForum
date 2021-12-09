@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "user_entity", schema = "public")
 @Data
 @JsonIgnoreProperties({"hibernateLazyInitializer"})
 public class User {
@@ -17,9 +17,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
+    @PrimaryKeyJoinColumn
     private Long userId;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "password")
@@ -31,7 +32,7 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "phone")
@@ -41,7 +42,11 @@ public class User {
     @Column(name = "user_role")
     private UserRole userRole;
 
-    @OneToMany(mappedBy = "user")
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_status")
+    private UserStatus userStatus;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     List<Publication> publications = new ArrayList<>();
 
     public User() {

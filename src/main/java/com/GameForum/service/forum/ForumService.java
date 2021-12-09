@@ -51,7 +51,7 @@ public class ForumService {
     }
 
     public List<PublicationDto> findPublicationsByCategory(Long categoryId) {
-        List<Publication> publications = publicationRepos.findPublicationsByCategory_CategoryId(categoryId);
+        List<Publication> publications = publicationRepos.findPublicationsByPublicationCategory_CategoryId(categoryId);
         return convertPublicationListToPublicationDtoList(publications);
     }
 
@@ -81,8 +81,8 @@ public class ForumService {
         publicationDto.setTitle(publication.getTitle());
         publicationDto.setContent(publication.getContent());
         publicationDto.setPhoto(publication.getPhoto());
-        publicationDto.setCategoryName(publication.getCategory().getCategoryName());
-        publicationDto.setCategoryId(publication.getCategory().getCategoryId());
+        publicationDto.setCategoryName(publication.getPublicationCategory().getCategoryName());
+        publicationDto.setCategoryId(publication.getPublicationCategory().getCategoryId());
         publicationDto.setStatus(publication.getStatus());
         publicationDto.setShipDate(publication.getShipDate());
         publicationDto.setLikes(publication.getLikes());
